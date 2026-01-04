@@ -1,5 +1,5 @@
 IP: 84.201.161.176;
 name_taski: https://taski.my-kitty-project.online;
 name_kittygram: https://kittygram.my-kitty-project.online;
-login: xumezzan@icloud.com;
-password: horriblebosses;
+login: xuma;
+password: 3112979xi;
