@@ -1,0 +1,98 @@
+server {
+    server_name kittygram.my-kitty-project.online;
+
+    # API (Django Kittygram)
+    location /api/ {
+        client_max_body_size 20M;
+        proxy_pass http://127.0.0.1:8080;
+        include /etc/nginx/proxy_params;
+    }
+
+    # Admin (Django Kittygram)
+    location /admin/ {
+        client_max_body_size 20M;
+        proxy_pass http://127.0.0.1:8080;
+        include /etc/nginx/proxy_params;
+    }
+
+    # Статика бэкенда (collectstatic -> /var/www/kittygram/static_backend)
+    location /static_backend/ {
+        alias /var/www/kittygram/static_backend/;
+    }
+
+    # Медиа котиков
+    location /media/ {
+        alias /var/www/kittygram/media/;
+    }
+
+    # Frontend (React build)
+    location / {
+        root /var/www/kittygram;
+        index index.html;
+        try_files $uri /index.html;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/kittygram.my-kitty-project.online/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/kittygram.my-kitty-project.online/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+    server_name taski.my-kitty-project.online;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:8000;
+        include /etc/nginx/proxy_params;
+    }
+
+    location /admin/ {
+        proxy_pass http://127.0.0.1:8000;
+        include /etc/nginx/proxy_params;
+    }
+
+    location /static_backend/ {
+        alias /var/www/html/static_backend/;
+    }
+
+    location / {
+        root /var/www/html;
+        index index.html;
+        try_files $uri /index.html;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/kittygram.my-kitty-project.online/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/kittygram.my-kitty-project.online/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+    if ($host = kittygram.my-kitty-project.online) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name kittygram.my-kitty-project.online;
+    return 404; # managed by Certbot
+
+
+}
+
+server {
+    if ($host = taski.my-kitty-project.online) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name taski.my-kitty-project.online;
+    return 404; # managed by Certbot
+
+
+}
