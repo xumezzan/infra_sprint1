@@ -72,27 +72,14 @@ server {
 }
 
 server {
-    if ($host = kittygram.my-kitty-project.online) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
     listen 80;
     server_name kittygram.my-kitty-project.online;
-    return 404; # managed by Certbot
-
-
+    return 301 https://$host$request_uri;
 }
 
 server {
-    if ($host = taski.my-kitty-project.online) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
     listen 80;
     server_name taski.my-kitty-project.online;
-    return 404; # managed by Certbot
-
-
+    return 301 https://$host$request_uri;
 }
+
